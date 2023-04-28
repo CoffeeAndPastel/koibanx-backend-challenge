@@ -7,7 +7,6 @@ const { uploadRoute, uploadRouter } = require("./uploadRoute");
 const routes = express.Router();
 
 routes.use(uploadRoute, uploadRouter);
-routes.use(errorRoute, errorRouter);
 routes.use(taskRoute, taskRouter);
 routes.use(callbackRoute, callbackRouter);
 

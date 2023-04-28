@@ -1,10 +1,10 @@
 const express = require("express");
 const { getErrors } = require("../services/errorLogService");
 
-const errorRoute = "/errors";
-const errorRouter = express.Router();
+const errorRoute = "/:taskId/errors";
+const errorRouter = express.Router({ mergeParams: true });
 
-errorRouter.get("/:taskId", async (req, res) => {
+errorRouter.get("/", async (req, res) => {
     const taskId = req.params.taskId;
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;

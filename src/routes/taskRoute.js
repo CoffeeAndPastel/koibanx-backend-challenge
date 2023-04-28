@@ -3,6 +3,7 @@ const { getTask } = require("../services/taskService");
 
 const taskRoute = "/tasks";
 const taskRouter = express.Router();
+const { errorRoute, errorRouter } = require("./errorLogRoute");
 
 taskRouter.get("/:id", async (req, res) => {
     const id = req.params.id;
@@ -22,5 +23,7 @@ taskRouter.get("/:id", async (req, res) => {
         });
     }
 });
+
+taskRouter.use(errorRoute, errorRouter);
 
 module.exports = { taskRoute, taskRouter };
