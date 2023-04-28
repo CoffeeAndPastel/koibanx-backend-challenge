@@ -28,18 +28,24 @@ async function processBlock(taskId, block, mappingObj) {
     await updateTask(taskId, { countErrors: errors.length });
 }
 
-async function processFileInBlocks(taskId, file, mapping, blockSize = 1000) {
+function validateFile(file, mapping) {
     const workbook = xlsx.readFile(file.path);
     const sheetName = workbook.SheetNames[0];
     const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
     const dataKeys = Object.keys(data[0]);
     const mapKeys = Object.keys(mapping);
-    if (
-        !dataKeys.every((key) => mapKeys.includes(key)) ||
-        !mapKeys.every((key) => dataKeys.includes(key))
-    )
-        throw new Error("El archivo de Excel no tiene la estructura esperada.");
+
+    return (
+        dataKeys.every((key) => mapKeys.includes(key)) &&
+        mapKeys.every((key) => dataKeys.includes(key))
+    );
+}
+
+async function processFileInBlocks(taskId, file, mapping, blockSize = 1000) {
+    const workbook = xlsx.readFile(file.path);
+    const sheetName = workbook.SheetNames[0];
+    const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
     const blocks = [];
     for (let i = 0; i < data.length; i += blockSize) {
@@ -53,4 +59,4 @@ async function processFileInBlocks(taskId, file, mapping, blockSize = 1000) {
     await updateTask(taskId, { state: "done" });
 }
 
-module.exports = { processFileInBlocks };
+module.exports = { validateFile, processFileInBlocks };
