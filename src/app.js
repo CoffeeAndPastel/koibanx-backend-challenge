@@ -2,6 +2,8 @@ const express = require("express");
 const routes = require("./routes");
 const app = express();
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
     const apiInfo = {
         name: "Servicio de Carga de Excels - Reto de backend",

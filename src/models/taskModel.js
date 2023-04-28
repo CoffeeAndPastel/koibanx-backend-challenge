@@ -6,7 +6,7 @@ const taskSchema = new mongoose.Schema({
         enum: ["pending", "processing", "done"],
         default: "pending",
     },
-    count_errors: {
+    countErrors: {
         type: Number,
         default: 0,
     },
