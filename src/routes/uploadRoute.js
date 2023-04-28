@@ -1,7 +1,10 @@
 const express = require("express");
 const multer = require("multer");
 const { createTask } = require("../services/taskService");
-const { processFileInBlocks, validateFile } = require("../services/uploadService");
+const {
+    processFileInBlocks,
+    validateFile,
+} = require("../services/uploadService");
 
 const upload = multer({ dest: "uploads/" });
 
@@ -17,10 +20,10 @@ uploadRouter.post("/", upload.single("file"), async (req, res) => {
         const task = await createTask(callbackUrl);
         const taskId = task._id;
 
-        if (!validateFile)
-            res.status(400).json({
-                message: "El archivo de Excel no tiene la estructura esperada.",
-            });
+        const isValidFile = validateFile(file, mappingObj);
+        if (isValidFile) {
+            return res.status(400).json(isValidFile);
+        }
         processFileInBlocks(taskId, file, mappingObj);
 
         res.json({

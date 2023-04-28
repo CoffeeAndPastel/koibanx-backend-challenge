@@ -36,10 +36,17 @@ function validateFile(file, mapping) {
     const dataKeys = Object.keys(data[0]);
     const mapKeys = Object.keys(mapping);
 
-    return (
+    if (
         dataKeys.every((key) => mapKeys.includes(key)) &&
         mapKeys.every((key) => dataKeys.includes(key))
-    );
+    )
+        return null;
+    else
+        return {
+            message: "El archivo de Excel no tiene la estructura esperada.",
+            excel: dataKeys,
+            mapping: mapKeys,
+        };
 }
 
 async function processFileInBlocks(taskId, file, mapping, blockSize = 1000) {
